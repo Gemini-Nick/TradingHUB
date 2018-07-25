@@ -5,10 +5,10 @@ from vnpy.trader.app.ctaStrategy.ctaBacktesting import BacktestingEngine, MINUTE
 from vnpy.trader.app.ctaStrategy.strategy.strategyBollChannel import BollChannelStrategy
 from vnpy.trader.app.ctaStrategy.strategy.strategyAtrRsi import AtrRsiStrategy
 
-class BatchOptimization(object):
+class NickOptimization(object):
     def __init__(self):
         """"""
-    def calculateBacktesting(self, symbollist, strategylist, sort='sharpratio'):
+    def calculateBacktesting(self, symbollist, strategylist, sort='sharpeRatio'):
         # 填入品种队列和策略队列，返回结果resultlist, 为了输出方便检索，加入品种名称，策略名称和策略参数
         resultlist = []
         for symbol in symbollist:
@@ -115,8 +115,8 @@ if __name__ == "__main__":
             Strategylist2.append((BollChannelStrategy, para1))
             Strategylist2.append((AtrRsiStrategy, para1))
 
-    NT = BatchOptimization()
-    resultlist = NT.calculateBacktesting(symbollist, Strategylist2, sort='sharpratio')
+    NT = NickOptimization()
+    resultlist = NT.calculateBacktesting(symbollist, Strategylist2, sort='sharpeRatio')
     # 定义路径
     path = "C:/Users/Gemini-Nick/Desktop/IT/vnpy-master/examples/2.xlsx"
     NT.toExcel(resultlist, path)
