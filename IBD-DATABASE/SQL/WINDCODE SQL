@@ -1,0 +1,33 @@
+select S_INFO_COMPCODE 公司ID,a.S_INFO_WINDCODE Wind代码
+,a.S_INFO_CODE 股票代码,S_INFO_EXCHMARKET 交易场所,a.S_INFO_LISTBOARDNAME 上市板块
+, (Select Industriesname
+          From AShareIndustriesCode
+         Where Substr(b.SEC_IND_CODE, 1, 4) || '000000' = Industriescode) 证监会一级行业分类名称
+,(Select Industriesname
+          From AShareIndustriesCode
+         Where Substr(b.SEC_IND_CODE, 1, 6) || '0000' = Industriescode) 证监会二级行业分类名称
+,(Select Industriesname
+          From AShareIndustriesCode
+         Where Substr(b.SEC_IND_CODE, 1, 8) || '00' = Industriescode) 证监会三级行业分类名称
+,(Select Industriesname
+          From AShareIndustriesCode
+         Where b.SEC_IND_CODE = Industriescode) 证监会四级行业分类名称
+, (Select Industriesname
+          From AShareIndustriesCode
+          Where Substr(c.Wind_ind_code, 1, 4) || '000000' = Industriescode) Wind一级行业分类名称
+,(Select Industriesname
+          From AShareIndustriesCode
+         Where Substr(c.Wind_ind_code, 1, 6) || '0000' = Industriescode) Wind二级行业分类名称
+,(Select Industriesname
+          From AShareIndustriesCode
+         Where Substr(c.Wind_ind_code, 1, 8) || '00' = Industriescode) Wind三级行业分类名称
+,(Select Industriesname
+          From AShareIndustriesCode
+         Where c.Wind_ind_code = Industriescode) Wind四级行业分类名称
+,d.S_IPO_ANNCEDATE 发行公告日,S_IPO_LISTDATE 上市日期,S_IPO_COLLECTION 募集资金
+,nvl(S_FELLOW_SUBDATE,s_fellow_otcdate) 增发发行日期,nvl(S_FELLOW_LISTDATE,S_FELLOW_INSTLISTDATE) 增发上市日期,S_FELLOW_COLLECTION 增发募集资金
+from AShareDescription a
+inner join AShareSECNIndustriesClass b on a.S_INFO_WINDCODE=b.S_INFO_WINDCODE and b.CUR_SIGN=1
+inner join AShareIndustriesClass c on a.S_INFO_WINDCODE=c.S_INFO_WINDCODE and c.CUR_SIGN=1
+inner join AShareIPO d on a.S_INFO_WINDCODE=d.S_INFO_WINDCODE
+left join AShareSEO e on a.S_INFO_WINDCODE=e.S_INFO_WINDCODE and s_fellow_progress=3
